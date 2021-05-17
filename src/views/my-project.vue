@@ -126,7 +126,8 @@
 <script>
 const fs = window.require("fs");
 const path = window.require("path");
-const compressing = window.require("compressing");
+// const compressing = window.require("compressing");
+const { ipcRenderer } = window.require("electron");
 const { dialog } = window.require("electron").remote;
 export default {
   data() {
@@ -301,8 +302,9 @@ export default {
             // 如果已经有了压缩包,先删除压缩包
             fs.unlinkSync(_path + ".zip");
           }
-          await compressing.zip.compressDir(_path, _path + ".zip");
-          this.uploadZip(pageData.aid, _path + ".zip");
+          let _zip = ipcRenderer.sendSync("compress-folder", _path);
+          console.log("zip", _zip);
+          this.uploadZip(pageData.aid, _zip);
         }
       } else {
         console.log("无效的路径", _path);

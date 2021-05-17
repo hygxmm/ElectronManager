@@ -1,8 +1,9 @@
 'use strict'
 
-import { app, protocol, BrowserWindow } from 'electron'
+import { app, protocol, BrowserWindow, ipcMain } from 'electron'
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
 const isDevelopment = process.env.NODE_ENV !== 'production'
+const compressing = require("compressing");
 
 // Scheme must be registered before the app is ready
 protocol.registerSchemesAsPrivileged([
@@ -61,3 +62,8 @@ if (isDevelopment) {
     })
   }
 }
+
+ipcMain.on("compress-folder", async (event, arg) => {
+  await compressing.zip.compressDir(arg, arg + ".zip");
+  event.returnValue = arg + ".zip";
+})

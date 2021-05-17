@@ -11,7 +11,10 @@ const routes = [
     children: [
       {
         path: 'my-project',
-        component: () => import('@/views/my-project.vue')
+        component: () => import('@/views/my-project.vue'),
+        meta: {
+          Auth: true,
+        }
       }
     ]
   },
@@ -29,21 +32,23 @@ const routes = [
     redirect: '/404',
   }
 ]
-console.log('BASE_URL', process.env);
+
 const router = new VueRouter({
   mode: 'hash',
   base: process.env.BASE_URL,
   routes
 })
 
-// router.beforeEach((to, from, next) => {
-//   if (from.fullPath === to.fullPath) return;
-//   let user = localStorage.getItem('USERINFO');
-//   if (to.name !== 'login' && !user) {
-//     next({ path: '/login' });
-//   } else {
-//     next();
-//   }
-// })
+router.beforeEach((to, from, next) => {
+  if (from.fullPath === to.fullPath) next(false);
+  let user = localStorage.getItem('USERINFO');
+  if (to.meta.Auth) {
+    if (user) {
+      next();
+    } else {
+      next({ path: '/login' });
+    }
+  }
+})
 
 export default router

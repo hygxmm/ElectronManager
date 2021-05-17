@@ -1,6 +1,5 @@
 module.exports = {
     productionSourceMap: false, // 生产打包时不输出map文件，增加打包速度
-    publicPath: './',
     configureWebpack: config => {
         if (process.env.NODE_ENV === 'production') {
             config.optimization.minimizer[0].options.terserOptions.compress.warnings = false
@@ -15,7 +14,6 @@ module.exports = {
                 appId: "com.electron.manager",
                 productName: "Manager",
                 copyright: "Copyright @2021.01.05 liuhuan",
-                asar: false,
                 mac: {
                     category: "public.app-category.developer-tools",
                     icon: "build/icon.icns",
