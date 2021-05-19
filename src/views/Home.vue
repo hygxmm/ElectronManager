@@ -30,8 +30,8 @@
 <script>
 const menus = [
   { title: "项目管理", path: "/my-project" },
-  { title: "工作台", path: "/my-page" },
-  // { title: "开发助手", path: "/tool" },
+  { title: "页面管理", path: "/page-dispose" },
+  { title: "底包管理", path: "/basic-super" },
 ];
 export default {
   data() {

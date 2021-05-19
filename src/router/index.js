@@ -15,6 +15,13 @@ const routes = [
         meta: {
           Auth: true,
         }
+      },
+      {
+        path: 'basic-super',
+        component: () => import('@/views/basic-super.vue'),
+        meta: {
+          Auth: true,
+        }
       }
     ]
   },
