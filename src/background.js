@@ -63,7 +63,7 @@ if (isDevelopment) {
   }
 }
 
-ipcMain.on("compress-folder", async (event, arg) => {
+ipcMain.handle("compress-folder", async (event, arg) => {
   await compressing.zip.compressDir(arg, arg + ".zip");
-  event.returnValue = arg + ".zip";
+  return arg + ".zip";
 })

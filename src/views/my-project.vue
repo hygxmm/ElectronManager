@@ -302,9 +302,14 @@ export default {
             // 如果已经有了压缩包,先删除压缩包
             fs.unlinkSync(_path + ".zip");
           }
-          let _zip = ipcRenderer.sendSync("compress-folder", _path);
-          console.log("zip", _zip);
-          this.uploadZip(pageData.aid, _zip);
+          ipcRenderer
+            .invoke("compress-folder", _path)
+            .then((res) => {
+              this.uploadZip(pageData.aid, res);
+            })
+            .catch((err) => {
+              console.log("ERROR", err);
+            });
         }
       } else {
         console.log("无效的路径", _path);

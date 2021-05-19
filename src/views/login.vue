@@ -1,6 +1,7 @@
 <template>
   <div class="login">
     <div class="login-box">
+      <div class="login-box-title">Manager</div>
       <el-form ref="form" label-width="60px">
         <el-form-item label="账号">
           <el-input
@@ -59,7 +60,8 @@ export default {
 .login {
   width: 100%;
   height: 100%;
-  background: linear-gradient(#f3400a, #fa9500);
+  // background: linear-gradient(#f3400a, #fa9500);
+  background: #ffffff;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -71,6 +73,12 @@ export default {
     box-shadow: 0 0 10px #cccccc;
     border-radius: 8px;
     padding: 30px;
+    .login-box-title {
+      text-align: center;
+      margin-bottom: 20px;
+      font-weight: bold;
+      font-size: 28px;
+    }
   }
 }
 .tool {
