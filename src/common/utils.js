@@ -1,13 +1,7 @@
-const debounce = (fn, wait = 300) => {
-    let timer = null;
-    return function () {
-        timer && clearTimeout(timer);
-        timer = setTimeout(_ => {
-            fn.apply(this, arguments);
-        }, wait)
-    }
-}
+import throttle from './throttle.js';
+import debounce from './debounce.js';
 
-module.exports = {
-    debounce
+export default {
+    throttle,
+    debounce,
 }
