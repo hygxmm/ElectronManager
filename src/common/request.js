@@ -7,7 +7,7 @@ import store from '@/store/index.js';
 // axios实例
 const instance = axios.create({
     baseURL: domainApi,
-    timeout: 10000,
+    timeout: 60000,
     headers: {
         'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
     },

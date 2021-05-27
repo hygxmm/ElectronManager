@@ -67,3 +67,11 @@ ipcMain.handle("compress-folder", async (event, arg) => {
   await compressing.zip.compressDir(arg, arg + ".zip");
   return arg + ".zip";
 })
+
+ipcMain.handle("compress-folder-list", async (event, arg) => {
+  for (let i = 0; i < arg.length; i++) {
+    await compressing.zip.compressDir(arg[i], arg[i] + ".zip");
+  }
+  return arg.map(ele => ele + ".zip");
+})
+

@@ -17,4 +17,12 @@ export default {
     updatePage(data) {
         return axios.post('5fe1aaa5051c4', data);
     },
+    // 更新基础包
+    updateBasice(data) {
+        return axios.post('60acc03650b1d', data);
+    },
+    // 更新分类信息
+    updateClassify(data) {
+        return axios.post('60acbb54d05f8', data);
+    },
 }

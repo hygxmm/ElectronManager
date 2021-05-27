@@ -126,7 +126,6 @@
 <script>
 const fs = window.require("fs");
 const path = window.require("path");
-// const compressing = window.require("compressing");
 const { ipcRenderer } = window.require("electron");
 const { dialog } = window.require("electron").remote;
 export default {
