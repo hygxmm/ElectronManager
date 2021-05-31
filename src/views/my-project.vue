@@ -89,13 +89,18 @@
     </el-dialog>
     <!-- 项目预览 -->
     <el-dialog :title="previewTitle" :visible.sync="previewVisible">
-      <div style="display: flex;">
-        <el-input
-          class="w-260 mr-10"
-          v-model="pageKeyword"
-          placeholder="请输入要搜索的页面名称或路径"
-          @change="handleSearchPage"
-        ></el-input>
+      <div class="preview-dialog-head">
+        <div class="head-left">
+          <el-input
+            class="w-260 mr-10"
+            v-model="pageKeyword"
+            placeholder="请输入要搜索的页面名称或路径"
+            @change="handleSearchPage"
+          ></el-input>
+          <el-button type="primary" @click="handleSearchPage">
+            搜索
+          </el-button>
+        </div>
         <el-button type="primary" @click="importProjectPage">
           导入页面
         </el-button>
@@ -328,7 +333,7 @@ export default {
         .then((res) => {
           // console.log("上传压缩包", res);
           if (res.msg == "上传成功") {
-            this.updatePageData(pageId, res.data.id);
+            this.updatePageData(pageId, res.data.id, filePath);
           } else {
             console.log(filePath, "上传失败");
             this.$message.error(res.msg);
@@ -340,7 +345,7 @@ export default {
         });
     },
     // 更新页面数据
-    updatePageData(pageId, fileId) {
+    updatePageData(pageId, fileId, filePath) {
       this.$api
         .updatePage({
           aid: pageId,
@@ -352,6 +357,7 @@ export default {
           if (res.code == 1) {
             this.$message.success(res.msg);
             this.count++;
+            fs.unlinkSync(filePath);
             console.log("更新成功" + this.count + "页面");
           } else {
             this.$notify.error({
@@ -425,6 +431,14 @@ export default {
       // table 加position属性
       position: absolute;
     }
+  }
+}
+.preview-dialog-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  .head-left {
+    flex: 1;
   }
 }
 .w-260 {
