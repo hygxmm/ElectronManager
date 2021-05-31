@@ -18,7 +18,7 @@ const routes = [
       },
       {
         path: 'basic-super',
-        component: () => import('@/views/basic-super.vue'),
+        component: () => import('@/views/classify-super.vue'),
         meta: {
           Auth: true,
         }

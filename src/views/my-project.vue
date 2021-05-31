@@ -158,6 +158,13 @@ export default {
       return this.$store.getters.isLogin;
     },
   },
+  watch: {
+    previewVisible(val) {
+      if (!val) {
+        this.pageKeyword = "";
+      }
+    },
+  },
   methods: {
     // 获取本地存储的项目列表
     async getProjects() {
