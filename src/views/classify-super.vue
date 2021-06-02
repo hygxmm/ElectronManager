@@ -42,9 +42,6 @@
                 <el-button type="text" @click.stop="handleEdit(scope.row)">
                   编辑
                 </el-button>
-                <el-button type="text" @click.stop="handleAdmin(scope.row)">
-                  管理
-                </el-button>
                 <el-button type="text" @click.stop="handleUpdate(scope.row)">
                   更新
                 </el-button>
@@ -393,8 +390,6 @@ export default {
     },
     // 一键上传所有包
     uploadAllZip() {},
-    //
-    handleAdmin() {},
   },
   created() {
     this.getPackageData();

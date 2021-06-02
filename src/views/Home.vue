@@ -31,7 +31,7 @@
 const menus = [
   { title: "项目管理", path: "/my-project" },
   // { title: "页面管理", path: "/page-dispose" },
-  { title: "分类包管理", path: "/basic-super" },
+  { title: "分类包管理", path: "/classify-super" },
   { title: "基础包管理", path: "/basic-super" },
 ];
 export default {
