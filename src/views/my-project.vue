@@ -14,12 +14,7 @@
       <!-- 表格 -->
       <div class="main-container">
         <div class="container-table">
-          <el-table
-            :data="projects"
-            stripe
-            border
-            style="width: 100%; height: 100%"
-          >
+          <el-table :data="projects" stripe border height="100%">
             <el-table-column prop="aid" label="ID" width="50">
             </el-table-column>
             <el-table-column label="名称" width="180">
@@ -27,8 +22,9 @@
                 <span
                   class="table-name"
                   @click.stop.prevent="handlePreview(scope.row)"
-                  >{{ scope.row.name }}</span
                 >
+                  {{ scope.row.name }}
+                </span>
               </template>
             </el-table-column>
             <el-table-column prop="path" label="地址"> </el-table-column>
@@ -69,7 +65,7 @@
       </div>
     </div>
     <!-- 创建项目弹窗 -->
-    <el-dialog title="新建项目" :visible.sync="dialogFormVisible">
+    <el-dialog title="新建项目" :visible.sync="dialogFormVisible" width="600px">
       <el-form ref="projectForm" :model="createProjectData">
         <el-form-item label="项目名称" label-width="80px">
           <el-input
@@ -88,7 +84,11 @@
       </div>
     </el-dialog>
     <!-- 项目预览 -->
-    <el-dialog :title="previewTitle" :visible.sync="previewVisible">
+    <el-dialog
+      :title="previewTitle"
+      :visible.sync="previewVisible"
+      width="600px"
+    >
       <div class="preview-dialog-head">
         <div class="head-left">
           <el-input

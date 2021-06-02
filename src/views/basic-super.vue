@@ -5,9 +5,6 @@
         <el-button type="primary" @click="openAddPackDialog">
           添加包
         </el-button>
-        <el-button type="primary" @click="uploadAllZip">
-          一键上传
-        </el-button>
       </div>
       <div class="main-container">
         <div class="container-table">
@@ -25,16 +22,24 @@
             ></el-table-column>
             <el-table-column label="地址">
               <template slot-scope="scope">
-                <p>{{ scope.row.cpath }}</p>
-                <p>{{ scope.row.spath }}</p>
+                <p v-if="scope.row.type == '0'">{{ scope.row.path }}</p>
+                <p v-if="scope.row.type == '1'">{{ scope.row.cpath }}</p>
+                <p v-if="scope.row.type == '1'">{{ scope.row.spath }}</p>
               </template>
             </el-table-column>
+
+            <el-table-column label="类型" width="100">
+              <template slot-scope="scope">
+                <span class="">{{ scope.row.type | filterType }}</span>
+              </template>
+            </el-table-column>
+
             <el-table-column label="操作" width="120">
               <template slot-scope="scope">
                 <el-button type="text" @click.stop="handleEdit(scope.row)">
                   编辑
                 </el-button>
-                <el-button type="text" @click.stop="updateCategory(scope.row)">
+                <el-button type="text" @click.stop="handleUpdate(scope.row)">
                   更新
                 </el-button>
                 <el-button type="text" @click.stop="handleDel(scope.row)">
@@ -47,44 +52,22 @@
       </div>
       <el-dialog title="添加包" :visible.sync="addPackDialog" width="500px">
         <el-form :model="addPackDialogForm">
-          <el-form-item label="包名称" label-width="100px">
+          <el-form-item label="包名称" label-width="60px">
             <el-input
               v-model="addPackDialogForm.name"
               autocomplete="off"
             ></el-input>
           </el-form-item>
-
-          <el-form-item label="AID" label-width="100px">
+          <el-form-item label="包路径" label-width="60px">
             <el-input
-              v-model="addPackDialogForm.aid"
-              autocomplete="off"
-            ></el-input>
-          </el-form-item>
-
-          <el-form-item label="组件包路径" label-width="100px">
-            <el-input
-              v-model="addPackDialogForm.cpath"
+              v-model="addPackDialogForm.path"
               autocomplete="off"
               disabled
             >
               <el-button
                 slot="append"
                 icon="el-icon-folder-opened"
-                @click.stop="addPackagePath('cpath')"
-              ></el-button>
-            </el-input>
-          </el-form-item>
-
-          <el-form-item label="资源包路径" label-width="100px">
-            <el-input
-              v-model="addPackDialogForm.spath"
-              autocomplete="off"
-              disabled
-            >
-              <el-button
-                slot="append"
-                icon="el-icon-folder-opened"
-                @click.stop="addPackagePath('spath')"
+                @click.stop="addPackagePath('path')"
               ></el-button>
             </el-input>
           </el-form-item>
@@ -108,12 +91,15 @@ export default {
       addPackDialog: false, // 添加包弹窗状态
       addPackDialogForm: {
         name: "", // 分类名称
-        cpath: "", // 分类组件包路径
-        spath: "", // 分类资源包路径
-        aid: "", // 分类id
+        path: "", // 基础包路径
       }, // 添加包选项
       packages: [], // 包列表
     };
+  },
+  filters: {
+    filterType(val) {
+      return val == "0" ? "基础包" : "分类包";
+    },
   },
   methods: {
     // 获取包列表
@@ -152,8 +138,10 @@ export default {
     clearDialogData() {
       this.addPackDialogForm = {
         name: "",
+        type: "",
         cpath: "",
         spath: "",
+        path: "",
         aid: "",
       };
     },
@@ -162,17 +150,33 @@ export default {
       if (this.addPackDialogForm.name.trim() == "") {
         return this.$message.warning("请填写包名");
       }
-      if (this.addPackDialogForm.aid.trim() == "") {
-        return this.$message.warning("请填写aid");
+      if ((this.addPackDialogForm.type + "").trim() == "") {
+        return this.$message.warning("请选择类型");
       }
-      let pack = await this.$db.package.get({
-        aid: this.addPackDialogForm.aid.trim(),
-      });
-      if (pack) return this.$message.warning("该包已存在,请勿重复添加");
+      if (this.addPackDialogForm.type == "0") {
+        if (this.addPackDialogForm.path.trim() == "") {
+          return this.$message.warning("请选择包地址");
+        }
+        let pack = await this.$db.package.get({
+          path: this.addPackDialogForm.path.trim(),
+        });
+        if (pack) return this.$message.warning("该包已存在,请勿重复添加");
+      }
+      if (this.addPackDialogForm.type == "1") {
+        if (this.addPackDialogForm.aid.trim() == "") {
+          return this.$message.warning("请填写aid");
+        }
+        let pack = await this.$db.package.get({
+          aid: this.addPackDialogForm.aid.trim(),
+        });
+        if (pack) return this.$message.warning("该包已存在,请勿重复添加");
+      }
       await this.$db.package.add({
         name: this.addPackDialogForm.name.trim(),
+        path: this.addPackDialogForm.path.trim(),
         cpath: this.addPackDialogForm.cpath.trim(),
         spath: this.addPackDialogForm.spath.trim(),
+        type: this.addPackDialogForm.type.trim(),
         aid: this.addPackDialogForm.aid.trim(),
       });
       this.closeAddPackDialog();
@@ -181,7 +185,58 @@ export default {
     // 编辑
     handleEdit(obj) {
       console.log(obj);
-      this.$message.warning("该功能未开发");
+    },
+    // 更新
+    handleUpdate(obj) {
+      if (obj.type == "0") {
+        this.updateBasic(obj);
+      } else {
+        this.updateCategory(obj);
+      }
+    },
+    // 更新底包
+    updateBasic(obj) {
+      console.log(obj);
+      if (!obj.path) return this.$message.warning("未绑定路径");
+      if (!this.validatePath(obj.path)) {
+        return this.$message.warning("无效的路径");
+      }
+      ipcRenderer
+        .invoke("compress-folder-list", [obj.path])
+        .then(async (res) => {
+          console.log("压缩结果", res);
+          const result = await this.uploadZip(res[0]);
+          console.log("result", result);
+          if (result.code == 0) {
+            this.updateBasicInfo(result.data.id);
+          } else {
+            this.$message.warning("压缩包上传失败");
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    // 更新基础包信息
+    updateBasicInfo(fileId) {
+      console.log("什么情况????", fileId);
+      console.log("this.$store.getters.uid", this.$store.getters.uid);
+      let data = {
+        base_type: 0,
+        version: "2.0.0",
+        create_uid: this.$store.getters.uid,
+        file: fileId,
+        incremental_file: fileId,
+      };
+      console.log("???");
+      this.$api
+        .updateBasice(data)
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((err) => {
+          console.error("底包更新失败", err);
+        });
     },
     // 更新分类包
     updateCategory(obj) {
@@ -248,17 +303,13 @@ export default {
       return this.$api.uploadFile(formData);
     },
     // 删除
-    handleDel() {
-      this.$message.warning("该功能未开发");
-    },
+    handleDel() {},
     // 校验路径是否存在
     validatePath(path) {
       return fs.existsSync(path);
     },
     // 一键上传所有包
-    uploadAllZip() {
-      this.$message.warning("该功能未开发");
-    },
+    uploadAllZip() {},
   },
   created() {
     this.getPackageData();
