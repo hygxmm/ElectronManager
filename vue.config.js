@@ -17,7 +17,8 @@ module.exports = {
                 mac: {
                     category: "public.app-category.developer-tools",
                     icon: "build/icon.icns",
-                }
+                },
+                publish: ["github"]
             }
         }
     }
