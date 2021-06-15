@@ -17,6 +17,13 @@ const routes = [
         }
       },
       {
+        path: 'my-page',
+        component: () => import('@/views/my-page.vue'),
+        meta: {
+          Auth: true,
+        }
+      },
+      {
         path: 'classify-super',
         component: () => import('@/views/classify-super.vue'),
         meta: {

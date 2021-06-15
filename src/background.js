@@ -1,9 +1,13 @@
 'use strict'
 
-import { app, protocol, BrowserWindow, ipcMain } from 'electron'
-import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
+import { app, protocol, BrowserWindow, ipcMain } from 'electron';
+import { createProtocol } from 'vue-cli-plugin-electron-builder/lib';
+
 const isDevelopment = process.env.NODE_ENV !== 'production'
 const compressing = require("compressing");
+const updateManager = require("./common/updater.js");
+
+console.log('updateManager',updateManager);
 
 // Scheme must be registered before the app is ready
 protocol.registerSchemesAsPrivileged([
@@ -12,10 +16,12 @@ protocol.registerSchemesAsPrivileged([
 
 async function createWindow() {
   const win = new BrowserWindow({
-    width: 800,
-    height: 600,
-    minWidth: 800,
-    minHeight: 600,
+    width: 1186,
+    height: 733,
+    minWidth: 1186,
+    minHeight: 733,
+    maxWidth: 1186,
+    maxHeight: 733,
     webPreferences: {
       webSecurity: false,
       nodeIntegration: true,

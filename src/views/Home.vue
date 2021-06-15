@@ -30,6 +30,7 @@
 <script>
 const menus = [
   { title: "项目管理", path: "/my-project" },
+  { title: "自定义页面", path: "/my-page" },
   { title: "分类包管理", path: "/classify-super" },
   { title: "基础包管理", path: "/basic-super" },
 ];
