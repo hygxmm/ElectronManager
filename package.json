@@ -1,9 +1,11 @@
 {
   "name": "manager",
   "version": "1.0.4",
-  "private": true,
   "author": "默默",
   "description": "工作台辅助工具",
+  "private": true,
+  "repository": "https://gitee.com/zhongbenyanfabu/ManagerTool.git",
+  "provider": "github",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
